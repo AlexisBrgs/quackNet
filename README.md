@@ -20,27 +20,45 @@ $ git clone https://github.com/AlexisBrgs/quackNet.git
 $ cd quackNet
 ```
 
-3 / Install composer 
+3 / Composer 
 ------------------------
+
+
+```bash
+$ composer --version
+```
+You should have **at least** the 1.10.1 version. If you don't have composer or a former version, then go to: https://getcomposer.org/
+
+Now, we will install the dependencies listed in composer.json :
 
 ```bash
 $ composer install
-$ composer --version
 ```
 
-You should have **at least** the 1.10.1 version.
 
-4 / Install npm 
+
+4 / Npm 
 -------------------
 
 ```bash
-$ npm install
 $ npm -v
 ```
-You should have **at least** the 6.14.4 version.
 
-5 / Execute the new symfony commands
+You should have **at least** the 6.14.4 version. If you don't have npm or a former version, then go to : https://docs.npmjs.com/downloading-and-installing-node-js-and-npm
+
+Now, we will install the dependencies listed in package.json : 
+
+```bash
+$ npm install
+```
+
+
+5 / Execute symfony commands
 -------------------
+First, make sure you have download symfony commands : 
+https://symfony.com/download
+
+Then type : 
 
 ```bash
 $ symfony check:requirements
