@@ -1,0 +1,18 @@
+<div>
+<h1>We are ducking happy to have you with us now ! </h1>
+</div>
+
+    <div>
+        <div>
+                <h5>Details of your account</h5>
+                <p>Duckname : <strong>{{ user.duckName }}</strong></p><br>
+                <p>Lastname : <strong>{{ user.lastName }}</strong></p><br>
+                <p>Firstname : <strong>{{ user.firstname }}</strong></p><br>
+                <p>Contact mail : <strong>{{ user.email }}</strong></p><br>
+        </div>
+            <div>
+                <h5>Here is your beautiful profile picture :</h5>
+                <img alt='profile picture of {{ user.duckName }}' height="200" src="{{ user.img }}">
+            </div>
+        </div>
+

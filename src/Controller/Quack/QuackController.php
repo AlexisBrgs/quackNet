@@ -62,7 +62,7 @@ class QuackController extends AbstractController
     {
         $quack = new Quack();
 
-        $form=$this->createForm(QuackType::class, $quack)->handleRequest($request);
+        $form = $this->createForm(QuackType::class, $quack)->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $quack->setUser($this->getUser());
@@ -95,20 +95,33 @@ class QuackController extends AbstractController
     public function edit(Request $request, Quack $quack): Response
     {
 
-        $form = $this->createForm(QuackType::class, $quack);
-        $form->handleRequest($request);
+        $quackRights = $this->quackRepository->find($quack)->getUser();
+        $user = $this->getUser();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->em->flush();
-            $this->addFlash('edited', 'Your quack has been edited !');
+        if ($quackRights == $user)
+        {
+            $form = $this->createForm(QuackType::class, $quack);
+            $form->handleRequest($request);
 
-            return $this->redirectToRoute('quack_index');
+            if ($form->isSubmitted() && $form->isValid()) {
+                $this->em->flush();
+                $this->addFlash('edited', 'Your quack has been edited !');
+
+                return $this->redirectToRoute('quack_index');
+            }
+
+            return $this->render('quack/edit.html.twig', [
+                'quack' => $quack,
+                'form' => $form->createView(),
+            ]);
         }
 
-        return $this->render('quack/edit.html.twig', [
-            'quack' => $quack,
-            'form' => $form->createView(),
+        else
+        {
+            return  $this->render('quack/index.html.twig', [
+            'quacks' => $this->quackRepository->findAll(),
         ]);
+        }
     }
 
     /**
@@ -116,7 +129,7 @@ class QuackController extends AbstractController
      */
     public function delete(Request $request, Quack $quack): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$quack->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $quack->getId(), $request->request->get('_token'))) {
             $this->em->remove($quack);
             $this->em->flush();
             $this->addFlash('deleted', 'Your quack has been successfully deleted !');

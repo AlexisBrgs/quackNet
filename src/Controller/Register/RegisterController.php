@@ -4,6 +4,7 @@ namespace App\Controller\Register;
 
 use App\Entity\User;
 use App\Form\UserType;
+use App\GoogleMailerService\GoogleMailerService;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,12 +18,19 @@ class RegisterController extends AbstractController
     protected $em;
     protected $userRepository;
     protected $passwordEncoder;
+    protected $mailer;
 
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(
+        UserRepository $userRepository,
+        EntityManagerInterface $em,
+        UserPasswordEncoderInterface $passwordEncoder,
+        GoogleMailerService $mailer
+    )
     {
         $this->userRepository = $userRepository;
         $this->em = $em;
         $this->passwordEncoder = $passwordEncoder;
+        $this->mailer = $mailer;
     }
 
     /**
@@ -41,6 +49,10 @@ class RegisterController extends AbstractController
 
             $this->em->persist($user);
             $this->em->flush();
+
+            $this->mailer->newMail($this->render('mail/mail.html.twig', [
+                'user' => $user
+            ]));
 
             return $this->redirectToRoute('app_login');
         }
